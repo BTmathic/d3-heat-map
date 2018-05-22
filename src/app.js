@@ -35,7 +35,7 @@ fetch('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/maste
   }
 
   function setSizes() {
-    margin = { top: 20, right: 40, bottom: 60, left: 80 };
+    margin = { top: 20, right: 80, bottom: 60, left: 80 };
     height = 480 - margin.top - margin.bottom;
     width = 1020 - margin.left - margin.right;
     barHeight = height / 12;
@@ -44,9 +44,14 @@ fetch('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/maste
     legendMonth = 10;
 
     x = d3.scaleTime().range([0, width]);
-    y = d3.scaleTime().range([0, height]);
+    y = d3.scaleBand().range([0, height]);
     x.domain([new Date(1753, 0), new Date(2016, 0)]);
-    y.domain([new Date(1753, 0), new Date(1753, 11)]);
+    y.domain([
+      new Date(1753, 0), new Date(1753, 1), new Date(1753, 2), 
+      new Date(1753, 3), new Date(1753, 4), new Date(1753, 5), 
+      new Date(1753, 6), new Date(1753, 7), new Date(1753, 8),
+      new Date(1753, 9), new Date(1753, 10), new Date(1753, 11)
+    ]);
 
     svg
       .attr('width', width + margin.left + margin.right)
@@ -57,7 +62,7 @@ fetch('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/maste
 
   function drawGraph() {
     svg.append('g')
-      .attr('transform', `translate(0, ${height})`)
+      .attr('transform', `translate(${width/15}, ${height+10})`)
       .call(d3.axisBottom(x).tickFormat(d3.timeFormat('%Y')));
 
     svg.append('text')
@@ -67,12 +72,13 @@ fetch('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/maste
       .text('Years');
 
     svg.append('g')
-      .call(d3.axisLeft(y).tickFormat(d3.timeFormat('%B')));
+      .attr('transform', `translate(${width/15}, 10)`)
+      .call(d3.axisLeft(y).tickSize(0).tickFormat(d3.timeFormat('%B')));
 
     svg.append('text')
       .attr('transform', 'rotate(-90)')
       .attr('y', 0 - 1.5 * margin.right)
-      .attr('x', 0 - height / 2)
+      .attr('x', 0 - height/2)
       .style('text-anchor', 'middle')
       .text('Months');
 
@@ -84,7 +90,7 @@ fetch('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/maste
       .attr('x', (d) => (d.year - minYear) * barWidth)
       .attr('y', (d) => (d.month - 1) * barHeight)
       .attr('fill', (d) => getColour(d.variance + averageTemperature))
-      .attr('transform', (d) => `translate(${(d.year - minYear) * barWidth * 142.5}, ${barHeight - 33})`)
+      .attr('transform', (d) => `translate(${(d.year - minYear) * barWidth * 142.5 + width/15}, ${barHeight-23})`)
       .on('mouseover', (d) => mouseover(d)) 
       .on('mouseout', mouseout);
 
@@ -118,11 +124,11 @@ fetch('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/maste
         .attr('x', 0)
         .attr('y', 0)
         .attr('fill', () => colours[legendColour])
-        .attr('transform', `translate(${(legendYear - minYear) * barWidth * (142 + legendColour * barWidth * 380)}, ${barHeight + legendMonth * 39})`)
+        .attr('transform', `translate(${(legendYear - minYear) * barWidth * (142 + legendColour * barWidth * 380)}, ${barHeight + legendMonth * 39 + 10})`)
 
       svg.append('g').append('text')
         .attr('x', (legendYear - minYear) * barWidth * (143 + legendColour * barWidth * 380))
-        .attr('y', barHeight + legendMonth * 42.5)
+        .attr('y', barHeight + legendMonth * 42.5 + 10)
         .attr('text-anchor', 'left')
         .style('font-size', '10px')
         .text((eval(minTemp) + legendColour * (maxTemp - minTemp) / 11).toFixed(2));
