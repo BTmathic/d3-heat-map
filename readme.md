@@ -10,6 +10,10 @@ We display the global land-surface temperature recorded monthly between 1735 and
 
 * D3
 
+### Data
+
+https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json
+
 ### Built tools
 
 * Webpack
