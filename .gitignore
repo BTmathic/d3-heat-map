@@ -1,4 +1,6 @@
 node_modules/
-public/dist/
+dist/
+prod/
+.cache
 .env.development
 .env.test

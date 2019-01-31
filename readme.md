@@ -16,6 +16,6 @@ https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/globa
 
 ### Built tools
 
-* Webpack
+* Parcel
 * Yarn
 * Babel
